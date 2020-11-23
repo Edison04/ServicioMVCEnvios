@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MVCEnviosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cedula" Type="varchar" MaxLength="15" />
+    <Property Name="Nombre" Type="varchar" MaxLength="30" />
+    <Property Name="Apellidos" Type="varchar" MaxLength="30" />
+    <Property Name="Direccion" Type="varchar" MaxLength="50" />
+    <Property Name="Telefono" Type="varchar" MaxLength="20" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="EstadoPaquete">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Estado" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EstadoSede">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Estado" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Guia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fecha" Type="date" Nullable="false" />
+    <Property Name="DireccionOrigen" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TelefonoEmisor" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Receptor" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DireccionDestino" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TelefonoReceptor" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="TipoPaquete" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CiudadDestino" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="PesoPaquete" Type="float" Nullable="false" />
+    <Property Name="ValorEnvio" Type="float" Nullable="false" />
+    <Property Name="Observacion" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="IdSede" Type="bigint" Nullable="false" />
+    <Property Name="IdCliente" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Login">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Usuario" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Rol" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Sede">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Direccion" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="IdEstadoSede" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Trazabilidad">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fecha" Type="date" Nullable="false" />
+    <Property Name="Origen" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Destino" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Observaciones" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="IdGuia" Type="bigint" Nullable="false" />
+    <Property Name="IdEstadoPaquete" Type="bigint" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Guia_Cliente">
+    <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+    <End Role="Guia" Type="Self.Guia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Guia">
+        <PropertyRef Name="IdCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Guia_Sede">
+    <End Role="Sede" Type="Self.Sede" Multiplicity="1" />
+    <End Role="Guia" Type="Self.Guia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sede">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Guia">
+        <PropertyRef Name="IdSede" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sede_EstadoSede">
+    <End Role="EstadoSede" Type="Self.EstadoSede" Multiplicity="1" />
+    <End Role="Sede" Type="Self.Sede" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EstadoSede">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Sede">
+        <PropertyRef Name="IdEstadoSede" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Trazabilidad_EstadoPaquete">
+    <End Role="EstadoPaquete" Type="Self.EstadoPaquete" Multiplicity="1" />
+    <End Role="Trazabilidad" Type="Self.Trazabilidad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EstadoPaquete">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Trazabilidad">
+        <PropertyRef Name="IdEstadoPaquete" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Trazabilidad_Guia">
+    <End Role="Guia" Type="Self.Guia" Multiplicity="1" />
+    <End Role="Trazabilidad" Type="Self.Trazabilidad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guia">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Trazabilidad">
+        <PropertyRef Name="IdGuia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MVCEnviosModelStoreContainer">
+    <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EstadoPaquete" EntityType="Self.EstadoPaquete" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EstadoSede" EntityType="Self.EstadoSede" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Guia" EntityType="Self.Guia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sede" EntityType="Self.Sede" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Trazabilidad" EntityType="Self.Trazabilidad" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Guia_Cliente" Association="Self.FK_Guia_Cliente">
+      <End Role="Cliente" EntitySet="Cliente" />
+      <End Role="Guia" EntitySet="Guia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Guia_Sede" Association="Self.FK_Guia_Sede">
+      <End Role="Sede" EntitySet="Sede" />
+      <End Role="Guia" EntitySet="Guia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sede_EstadoSede" Association="Self.FK_Sede_EstadoSede">
+      <End Role="EstadoSede" EntitySet="EstadoSede" />
+      <End Role="Sede" EntitySet="Sede" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Trazabilidad_EstadoPaquete" Association="Self.FK_Trazabilidad_EstadoPaquete">
+      <End Role="EstadoPaquete" EntitySet="EstadoPaquete" />
+      <End Role="Trazabilidad" EntitySet="Trazabilidad" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Trazabilidad_Guia" Association="Self.FK_Trazabilidad_Guia">
+      <End Role="Guia" EntitySet="Guia" />
+      <End Role="Trazabilidad" EntitySet="Trazabilidad" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
